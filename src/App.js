@@ -20,9 +20,10 @@ import DashboardCategories from "./components/dashboard/Categories";
 /* => Errors */
 import R404 from "./components/errors/R404";
 
+
 function App() {
   return (
-    <div className="App">
+    <div className="App bg-darker-blue text-white min-h-screen">
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="" element={<Home />} />
@@ -38,8 +39,8 @@ function App() {
           <Route path="categories" element={<DashboardCategories />} />
         </Route>
         <Route path="/auth" element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
         </Route>
         <Route path="*" element={<R404 />} />
       </Routes>

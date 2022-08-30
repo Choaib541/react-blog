@@ -1,10 +1,15 @@
+import Navbar from "../public/partials/Navbar";
+import Footer from "../public/partials/Footer";
 import { Outlet } from "react-router-dom";
 
 const Main = () => {
   return (
     <div>
-      Main
-      <Outlet />
+      <Navbar />
+      <div className="min-h-[calc(100vh_-_60px)]">
+        <Outlet />
+      </div>
+      <Footer />
     </div>
   );
 };
