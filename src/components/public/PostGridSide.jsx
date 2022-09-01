@@ -3,7 +3,7 @@ import placeholder from "../../assets/placeholder.jpg";
 import { FaGithub } from "react-icons/fa";
 import { BsFacebook, BsLinkedin } from "react-icons/bs";
 
-const Side = () => {
+const Side = (categories) => {
   return (
     <>
       <div className="lg:col-start-10 lg:col-end-13">
@@ -38,7 +38,7 @@ const Side = () => {
           <form action="" className="flex flex-col  w-full px-8">
             <input
               type="text"
-              className="py-2 rounded pl-2 outline-none bg-darker-blue"
+              className="input-control"
               placeholder="Email Address..."
             />
             <button className="bg-primary rounded py-2 mt-3">Send</button>
@@ -47,12 +47,14 @@ const Side = () => {
         {/* / usefull categories / */}
         <Title title="Usefull Categories" />
         <div className="flex text-center bg-dark-blue rounded p-8 flex-wrap">
-          <span className="bg-gray py-1 px-2 text-dark-blue rounded mr-1 mb-1">
-            Youtube
-          </span>
-          <span className="bg-gray py-1 px-2 text-dark-blue rounded mr-1 mb-1">
-            Python
-          </span>
+          {categories.data.map((e) => (
+            <span
+              key={e.id}
+              className="bg-gray py-1 px-2 text-dark-blue rounded mr-1 mb-1"
+            >
+              {e.name}
+            </span>
+          ))}
         </div>
       </div>
     </>

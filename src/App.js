@@ -28,7 +28,8 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route path="" element={<Home />} />
           <Route path="posts" element={<Posts />} />
-          <Route path="posts/:id" element={<Show />} />
+          <Route path="posts/:search" element={<Posts />} />
+          <Route path="post/:id" element={<Show />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
         </Route>
