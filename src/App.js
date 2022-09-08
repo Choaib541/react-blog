@@ -19,11 +19,38 @@ import DashboardUsers from "./components/dashboard/Users";
 import DashboardCategories from "./components/dashboard/Categories";
 /* => Errors */
 import R404 from "./components/errors/R404";
-
+/* => Redux/toolkit */
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { api } from "./api";
+import { store } from "./store/features/UserSlice";
+/* => Profile */
+import Profile from "./components/Profile";
 
 function App() {
+  /*__________ Hooks __________*/
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (localStorage["token"]) {
+      async function fetch_profile() {
+        try {
+          const response = await api({
+            url: "/profile",
+            method: "get"
+          })
+          dispatch(store({ user: response.data, token: localStorage["token"] }))
+        } catch (err) {
+        }
+      }
+      fetch_profile()
+    }
+  }, [dispatch])
+
+
+  /*__________ JSX __________*/
   return (
     <div className="App bg-darker-blue text-white min-h-screen">
+
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="" element={<Home />} />
@@ -32,6 +59,7 @@ function App() {
           <Route path="post/:id" element={<Show />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route path="" element={<Dashboard />} />

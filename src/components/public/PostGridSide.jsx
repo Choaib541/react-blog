@@ -2,8 +2,26 @@ import Title from "../Title";
 import placeholder from "../../assets/placeholder.jpg";
 import { FaGithub } from "react-icons/fa";
 import { BsFacebook, BsLinkedin } from "react-icons/bs";
+import { useState, useEffect } from "react";
+import { api } from "../../api";
 
-const Side = (categories) => {
+const Side = () => {
+  const [categories, setCategories] = useState({
+    data: [],
+  });
+
+  useEffect(() => {
+    async function fetch_categories() {
+      const response = await api({
+        method: "get",
+        url: "/categories",
+      });
+      setCategories(response.data);
+    }
+
+    fetch_categories();
+  }, []);
+
   return (
     <>
       <div className="lg:col-start-10 lg:col-end-13">
@@ -21,13 +39,22 @@ const Side = (categories) => {
             harum reiciendis eaque nobis. Non quisquam veritatis velit omnis
           </span>
           <div className="flex mt-4">
-            <a href="" className="mx-2 text-xl text-gray">
+            <a
+              href="https://github.com/Choaib541"
+              className="mx-2 text-xl text-gray"
+            >
               <FaGithub />
             </a>
-            <a href="" className="mx-2 text-xl text-gray">
+            <a
+              href="https://www.facebook.com/Camado.Choaib"
+              className="mx-2 text-xl text-gray"
+            >
               <BsFacebook />
             </a>
-            <a href="" className="mx-2 text-xl text-gray">
+            <a
+              href="https://www.linkedin.com/in/choaib-mouhrach-3b08a5219/"
+              className="mx-2 text-xl text-gray"
+            >
               <BsLinkedin />
             </a>
           </div>
