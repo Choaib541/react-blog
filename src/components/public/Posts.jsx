@@ -2,81 +2,79 @@ import React, { useEffect, useState } from "react";
 import PostGrid from "./PostGrid";
 import { api } from "../../api";
 import { useSearchParams } from "react-router-dom";
+import { debounce } from "../../helpers/apiHelpers";
 
 const Posts = () => {
-  /*_______ Hooks _______*/
+  /*__________ STATES __________*/
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const [status, setStatus] = useState("pending");
   const [posts, setPosts] = useState({
     data: [],
-    current_page: 1,
-    total: 1,
+    last_page: null,
   });
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setsearch] = useState("");
-  const [page, setPage] = useState(searchParams.get("page") ?? 1);
-
-  /*_______ useEffect _______*/
-
+  /*__________ useEffect __________*/
   useEffect(() => {
-    async function fetch_posts() {
+    async function fetch_data() {
       let url = "/posts";
-
-      if (search !== "") {
-        url += `?search=${search}&page=${page}`;
-      } else {
-        url += `?page=${page}`;
+      let url_edited = false;
+      if (searchParams.get("search")) {
+        url += `?search=${searchParams.get("search")}`;
+        url_edited = true;
       }
 
-      const response = await api({
-        method: "get",
-        url: url,
-      });
+      if (searchParams.get("page")) {
+        if (url_edited) {
+          url += `&page=${searchParams.get("page")}`;
+        } else {
+          url += `?page=${searchParams.get("page")}`;
+        }
+      }
 
-      setPosts(response.data);
-      search !== "" && setSearchParams({ search: search });
-      search !== "" && setSearchParams({ page: page });
+      try {
+        const response = await api({
+          method: "get",
+          url: url,
+        });
+        setPosts(response.data);
+        setStatus("success");
+      } catch (err) {
+        setStatus("rejected");
+      }
     }
-
-    fetch_posts();
-  }, [search, setSearchParams, searchParams, page]);
-
-  useEffect(() => {
-    const search = searchParams.get("search") ?? false;
-
-    if (search) {
-      setsearch(search);
-    }
-
-    const page = searchParams.get("page") ?? false;
-
-    if (page) {
-      setPage(page);
-    }
+    fetch_data();
   }, [searchParams]);
 
-  /*_______ Functions _______*/
+  /*__________ Functions __________*/
+  const handle_input_search = debounce((value) => {
+    value = value.replaceAll(" ", "%");
+    setSearchParams({ ...searchParams, search: value });
+  });
 
-  const handle_search = (value) => {
-    setsearch(value);
-  };
-
-  const search_event = (event) => handle_search(event.target.value);
-
-  /*_______ [JSX] _______*/
+  /*__________ JSX __________*/
   return (
     <div className="container mx-auto pt-[60px]">
-      <div className="bg-dark-blue rounded p-2 mt-4 mx-4 lg:mx-0">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        className="bg-dark-blue rounded p-2 mt-4 mx-4 lg:mx-0"
+      >
         <input
-          defaultValue={search}
-          onChange={search_event}
+          defaultValue={
+            searchParams.get("search") === null
+              ? ""
+              : searchParams.get("search").replaceAll("%", " ")
+          }
+          onChange={(e) => handle_input_search(e.target.value)}
           className="input-control w-full"
           placeholder="Search..."
           type="text"
         />
-      </div>
+      </form>
       <PostGrid
+        status={status}
         posts={posts.data}
-        current_page={posts.current_page}
         last_page={posts.last_page}
         showPagination={true}
       />

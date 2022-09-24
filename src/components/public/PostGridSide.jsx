@@ -4,19 +4,27 @@ import { FaGithub } from "react-icons/fa";
 import { BsFacebook, BsLinkedin } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { api } from "../../api";
+import Categories from "./Categories";
+import CategoriesSkelton from "./skeletons/Categories.skelton";
 
 const Side = () => {
   const [categories, setCategories] = useState({
     data: [],
   });
+  const [status, setStatus] = useState("pending");
 
   useEffect(() => {
     async function fetch_categories() {
-      const response = await api({
-        method: "get",
-        url: "/categories",
-      });
-      setCategories(response.data);
+      try {
+        const response = await api({
+          method: "get",
+          url: "/categories",
+        });
+        setCategories(response.data);
+        setStatus("success");
+      } catch (err) {
+        setStatus("rejected");
+      }
     }
 
     fetch_categories();
@@ -73,16 +81,9 @@ const Side = () => {
         </div>
         {/* / usefull categories / */}
         <Title title="Usefull Categories" />
-        <div className="flex text-center bg-dark-blue rounded p-8 flex-wrap">
-          {categories.data.map((e) => (
-            <span
-              key={e.id}
-              className="bg-gray py-1 px-2 text-dark-blue rounded mr-1 mb-1"
-            >
-              {e.name}
-            </span>
-          ))}
-        </div>
+        {status === "success" && <Categories categories={categories} />}
+        {status === "pending" && <CategoriesSkelton />}
+        {status === "rejected" && "Products Not Found"}
       </div>
     </>
   );

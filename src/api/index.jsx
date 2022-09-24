@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_URL } from "./API_DATA";
 
 const headers = {
   Accept: "application/json",
@@ -9,6 +10,6 @@ if (localStorage["token"]) {
 }
 
 export const api = axios.create({
-  baseURL: "http://localhost/api",
+  baseURL: API_URL,
   headers: headers,
 });

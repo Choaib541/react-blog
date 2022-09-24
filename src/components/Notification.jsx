@@ -1,8 +1,10 @@
 /* => React-Toast */
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { destory, get_data } from "../store/features/NotificationSlice";
+import Success from "./notifications/Success";
+import Error from "./notifications/Error";
 
 const Notification = () => {
   const dispatch = useDispatch();
@@ -11,13 +13,10 @@ const Notification = () => {
   useEffect(() => {
     switch (notification.status) {
       case "success":
-        toast.success(notification.message);
-        break;
-      case "warning":
-        toast.warning(notification.message);
+        Success(notification.message);
         break;
       case "error":
-        toast.error(notification.message);
+        Error(notification.message);
         break;
       default: {
       }

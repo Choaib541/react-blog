@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { is_connected } from "../../../store/features/UserSlice";
 import { get_user, logout } from "../../../store/features/UserSlice";
 import { store } from "../../../store/features/NotificationSlice";
+import { API_STORAGE_URL } from "../../../api/API_DATA";
 
 const Navbar = () => {
   /*_____________ Hooks _____________*/
@@ -89,7 +90,7 @@ const Navbar = () => {
                   <img
                     onClick={show_avatar_control}
                     className="rounded-full cursor-pointer w-[40px] h-[40px]"
-                    src={"http://localhost/" + user.picture}
+                    src={API_STORAGE_URL + user.picture}
                     alt=""
                   />
                   <div
@@ -100,10 +101,14 @@ const Navbar = () => {
                   >
                     <ul className="lg:absolute lg:bg-dark-blue lg:shadow-lg text-center lg:p-3 lg:rounded ">
                       <li className="mt-2 hover:bg-gray hover:text-dark-blue rounded">
-                        <Link to={"/profile"}>Profile</Link>
+                        <Link className="px-2" to={"/profile"}>
+                          Profile
+                        </Link>
                       </li>
                       <li className="mt-2 hover:bg-gray hover:text-dark-blue rounded">
-                        <Link to={"/dashboard"}>Dashboard</Link>
+                        <Link className="px-2" to={"/dashboard"}>
+                          Dashboard
+                        </Link>
                       </li>
                       <li
                         onClick={handle_logout}
